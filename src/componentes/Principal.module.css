@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@reference "../index.css";
+
+/* Contenedor principal */
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenedor secundario */
+.contenedor_secundario {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 500px;
+}
+
+/* Título */
+.titulo {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  letter-spacing: -1px;
+}
+
+/* Subtítulo */
+.subtitulo {
+  /* color: gray; */
+  @apply text-gray-600;
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  font-weight: 400;
+}

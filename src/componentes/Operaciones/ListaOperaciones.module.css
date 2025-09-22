@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@reference "../../index.css";
+
+.cabeceraTabla{
+    @apply px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase;
+}
+
+.celdaTabla{
+    @apply px-6 py-4 text-sm text-gray-900 text-center;
+}
