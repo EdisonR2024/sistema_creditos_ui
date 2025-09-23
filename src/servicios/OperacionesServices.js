@@ -10,7 +10,7 @@ export async function obtenerOperaciones() {
 }
 
 export async function crearOperacion(operacion) {
-    console.log("datos recibidos para crear: ", operacion);
+    // console.log("datos recibidos para crear: ", operacion);
     let respuesta = await fetch(urlAPI, {
         method: 'POST',
         headers: {
@@ -27,29 +27,29 @@ export async function crearOperacion(operacion) {
 
 }
 
-export async function eliminarEmpleado(idEmpleado) {
-    const respuesta = await fetch(urlAPI + "/" + idEmpleado, {
+export async function eliminarOperacion(idOperacion) {
+    const respuesta = await fetch(urlAPI + "/" + idOperacion, {
         method: 'DELETE'
     })
 
     if (respuesta.ok) {
-        console.log("Se ha eliminado el empleado");
+        console.log("Se ha eliminado la operación");
     }
 }
 
-export async function actualizarEmpleado(idEmpleado, datosEmpleado) {
+export async function actualizarOperacion(idOperacion, datosOperacion) {
     // console.log("ingreso a actualizarEmpleado en services")
-    const respuesta = await fetch(urlAPI + "/" + idEmpleado, {
+    const respuesta = await fetch(urlAPI + "/" + idOperacion, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(datosEmpleado)
+        body: JSON.stringify(datosOperacion)
 
     })
 
     if (respuesta.ok) {
-        console.log("Empleado actualizado")
+        console.log("Operación actualizada")
     }
 
 }

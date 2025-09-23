@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import FormularioOperaciones from './FormularioOperaciones'
 import ListaOperaciones from './ListaOperaciones'
-import { crearOperacion, obtenerOperaciones } from '../../servicios/OperacionesServices';
-import { useEffect, useState } from 'react';
+import { actualizarOperacion, crearOperacion, eliminarOperacion, obtenerOperaciones } from '../../servicios/OperacionesServices';
+import { act, useEffect, useState } from 'react';
 
 function PrincipalOperaciones() {
 
@@ -10,6 +10,8 @@ function PrincipalOperaciones() {
 
   const [operaciones, setOperaciones] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [esAccionCrear, setEsAccionCrear] = useState(true);
+  const [operacionSeleccionadaActualizar, setOperacionSeleccionadaActualizar] = useState([]);
 
 
   useEffect(() => {
@@ -28,9 +30,7 @@ function PrincipalOperaciones() {
   }
 
   const onClickNuevaOperacion = async (operacionNueva) => {
-    console.log('Nueva operación:', operacionNueva);
-    // Aquí debe ir la lógica de agregar la nueva operación
-
+    // console.log('Nueva operación:', operacionNueva);
     let nuevaOperacion = await crearOperacion(operacionNueva);
     setOperaciones([...operaciones, nuevaOperacion]);
 
@@ -38,12 +38,29 @@ function PrincipalOperaciones() {
 
   const onClickEditarOperacion = (operacion) => {
     console.log('Editar operación:', operacion);
-    // Aquí debe ir la lógica de editar operación
+    setEsAccionCrear(false);
+    setOperacionSeleccionadaActualizar(operacion);
   };
 
-  const onClickEliminarOperacion = (id) => {
-    console.log('Eliminar operación:', id);
-    // Aquí debe ir la lógica de eliminar operación
+  const onClickActualizarOperacion = async (idOperacion, operacionActualizada) => {
+    // console.log('Actualizar operación:', operacionActualizada);  
+    await actualizarOperacion(idOperacion, operacionActualizada);
+
+    // Actualizar la lista de operaciones en el estado
+    const listaOperaciones = operaciones.map(operacion =>
+      operacion.operacionID === idOperacion ? { ...operacion, ...operacionActualizada } : operacion
+    );
+    
+    setOperaciones(listaOperaciones);
+    setEsAccionCrear(true);
+    setOperacionSeleccionadaActualizar([]); 
+  }
+
+  const onClickEliminarOperacion = async (id) => {
+    // console.log('Eliminar operación:', id);
+    await eliminarOperacion(id);
+    const listaOperaciones = operaciones.filter(operacion => operacion.operacionID !== id);
+    setOperaciones(listaOperaciones);
   };
 
   return (
@@ -64,9 +81,15 @@ function PrincipalOperaciones() {
         {/* Sección Formulario */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Nueva Operación
+            {esAccionCrear ? 'Nueva' : 'Actualizar'} Operación
           </h2>
-          <FormularioOperaciones onSubmit={onClickNuevaOperacion} />
+          <FormularioOperaciones
+            esAccionCrear={esAccionCrear}
+            setEsAccionCrear={setEsAccionCrear}
+            onSubmit={onClickNuevaOperacion}
+            onActualizar={onClickActualizarOperacion}
+            operacionSeleccionadaActualizar={operacionSeleccionadaActualizar}
+          />
         </div>
 
         {/* Sección Lista */}

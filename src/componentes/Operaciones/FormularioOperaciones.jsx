@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import estilos from "./FormularioOperaciones.module.css";
 
-function FormularioOperaciones({ onSubmit }) {
-  
+function FormularioOperaciones({ esAccionCrear, setEsAccionCrear, onSubmit,
+  onActualizar, operacionSeleccionadaActualizar }) {
+
   const [DatosFormulario, setDatosFormulario] = useState({
     identificacion: '',
     nombre: '',
@@ -12,6 +13,20 @@ function FormularioOperaciones({ onSubmit }) {
     plazoMeses: '',
     aprobado: false
   });
+
+  useEffect(() => {
+    if (!esAccionCrear) {
+      setDatosFormulario({
+        identificacion: operacionSeleccionadaActualizar.identificacion,
+        nombre: operacionSeleccionadaActualizar.nombre,
+        tipoCredito: operacionSeleccionadaActualizar.tipoCredito,
+        monto: operacionSeleccionadaActualizar.monto,
+        fechaInicio: operacionSeleccionadaActualizar.fechaInicio.substring(0, 10),
+        plazoMeses: operacionSeleccionadaActualizar.plazoMeses,
+        aprobado: operacionSeleccionadaActualizar.aprobado
+      });
+    }
+  }, [esAccionCrear, operacionSeleccionadaActualizar]);
 
   const onChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -23,9 +38,9 @@ function FormularioOperaciones({ onSubmit }) {
 
   const onClickSubmit = (e) => {
     e.preventDefault();
-    console.log('Datos del formulario:', DatosFormulario);
-    onSubmit(DatosFormulario);
-    // Limpiar formulario después de enviar
+    // console.log('Datos del formulario:', DatosFormulario);
+    esAccionCrear ? onSubmit(DatosFormulario) : onActualizar(operacionSeleccionadaActualizar.operacionID, DatosFormulario);
+    // onSubmit(DatosFormulario);
     limpiarFormulario();
   };
 
@@ -41,11 +56,17 @@ function FormularioOperaciones({ onSubmit }) {
     });
   }
 
+  const cancelarActualizacion = () => {
+    limpiarFormulario();
+    setEsAccionCrear(true);
+    // Aquí puedes agregar lógica adicional para manejar la cancelación de la actualización
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <form onSubmit={onClickSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
+
           {/* Identificación */}
           <div>
             <label className={estilos.labelFormulario}>
@@ -171,15 +192,25 @@ function FormularioOperaciones({ onSubmit }) {
             type="submit"
             className={estilos.botonGuardarFormulario}
           >
-            Guardar Operación
+            {esAccionCrear ? 'Guardar' : 'Actualizar'} Operación
           </button>
-          <button
-            type="button"
-            className={estilos.botonLimpiarFormulario}
-            onClick={limpiarFormulario}
-          >
-            Limpiar
-          </button>
+          {esAccionCrear ?
+            <button
+              type="button"
+              className={estilos.botonLimpiarFormulario}
+              onClick={limpiarFormulario}
+            >
+              Limpiar
+            </button>
+            :
+            <button
+              type="button"
+              className={estilos.botonLimpiarFormulario}
+              onClick={cancelarActualizacion}
+            >
+              Cancelar
+            </button>
+          }
         </div>
       </form>
     </div>
