@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import FormularioOperaciones from './FormularioOperaciones'
 import ListaOperaciones from './ListaOperaciones'
 import { actualizarOperacion, crearOperacion, eliminarOperacion, obtenerOperaciones } from '../../servicios/OperacionesServices';
-import { act, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import MensajeInformacion from '../compartidos/MensajeInformacion';
 
 function PrincipalOperaciones() {
 
@@ -13,6 +14,11 @@ function PrincipalOperaciones() {
   const [esAccionCrear, setEsAccionCrear] = useState(true);
   const [operacionSeleccionadaActualizar, setOperacionSeleccionadaActualizar] = useState([]);
 
+  const [presentarMensaje, setPresentarMensaje] = useState(false);
+  const [tipoMensaje, setTipoMensaje] = useState("");
+
+  // const textoMensaje = esAccionCrear ? "Operación creada exitosamente" : "Operación actualizada exitosamente";
+  const [textoMensaje, setTextoMensaje] = useState("");
 
   useEffect(() => {
 
@@ -29,15 +35,27 @@ function PrincipalOperaciones() {
     navegacion("/");
   }
 
+  const mostrarMensajeTemporal = (tipo, texto) => {
+    setPresentarMensaje(true);
+    setTipoMensaje(tipo);
+    setTextoMensaje(texto);
+    setTimeout(() => {
+      setPresentarMensaje(false);
+    }, 3000);
+  }
+
   const onClickNuevaOperacion = async (operacionNueva) => {
     // console.log('Nueva operación:', operacionNueva);
     let nuevaOperacion = await crearOperacion(operacionNueva);
+    mostrarMensajeTemporal("success", "Operación creada exitosamente");
     setOperaciones([...operaciones, nuevaOperacion]);
+    // setPresentarMensaje(true);
+    
 
   };
 
   const onClickEditarOperacion = (operacion) => {
-    console.log('Editar operación:', operacion);
+    // console.log('Editar operación:', operacion);
     setEsAccionCrear(false);
     setOperacionSeleccionadaActualizar(operacion);
   };
@@ -45,20 +63,21 @@ function PrincipalOperaciones() {
   const onClickActualizarOperacion = async (idOperacion, operacionActualizada) => {
     // console.log('Actualizar operación:', operacionActualizada);  
     await actualizarOperacion(idOperacion, operacionActualizada);
-
+    mostrarMensajeTemporal("info", "Operación actualizada exitosamente");
     // Actualizar la lista de operaciones en el estado
     const listaOperaciones = operaciones.map(operacion =>
       operacion.operacionID === idOperacion ? { ...operacion, ...operacionActualizada } : operacion
     );
-    
+
     setOperaciones(listaOperaciones);
     setEsAccionCrear(true);
-    setOperacionSeleccionadaActualizar([]); 
+    setOperacionSeleccionadaActualizar([]);
   }
 
   const onClickEliminarOperacion = async (id) => {
     // console.log('Eliminar operación:', id);
     await eliminarOperacion(id);
+    mostrarMensajeTemporal("info", "Operación eliminada exitosamente");
     const listaOperaciones = operaciones.filter(operacion => operacion.operacionID !== id);
     setOperaciones(listaOperaciones);
   };
@@ -80,9 +99,12 @@ function PrincipalOperaciones() {
       <div className="p-7 max-w-7xl mx-auto">
         {/* Sección Formulario */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            {esAccionCrear ? 'Nueva' : 'Actualizar'} Operación
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              {esAccionCrear ? 'Nueva' : 'Actualizar'} Operación
+            </h2>
+            {presentarMensaje && <MensajeInformacion tipo={tipoMensaje} mensaje={textoMensaje} />}
+          </div>
           <FormularioOperaciones
             esAccionCrear={esAccionCrear}
             setEsAccionCrear={setEsAccionCrear}

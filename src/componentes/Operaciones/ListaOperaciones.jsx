@@ -1,6 +1,27 @@
+import { useState } from "react";
+import ModalConfirmar from "../compartidos/ModalConfirmar";
 import estilos from "./ListaOperaciones.module.css";
 
 function ListaOperaciones({ operaciones, loading, onEditar, onEliminar }) {
+
+  const [abrirModal, setAbrirModal] = useState(false);
+  const [idRegistroEliminar, setIdRegistroEliminar] = useState();
+
+  const cancelarEliminar = () => {
+    setAbrirModal(false);
+  }
+
+  const aceptarEliminar = async () => {
+    // await eliminarRegistro(idRegistroEliminar);
+    await onEliminar(idRegistroEliminar);
+    setAbrirModal(false);
+  }
+
+  const confirmarEliminacion = (idRegistro) => {
+    setAbrirModal(true);
+    setIdRegistroEliminar(idRegistro);
+  }
+
 
   const formatoDinero = (cantidad) => {
     return new Intl.NumberFormat('es-EC', {
@@ -106,7 +127,8 @@ function ListaOperaciones({ operaciones, loading, onEditar, onEliminar }) {
                       Editar
                     </button>
                     <button
-                      onClick={() => onEliminar(operacion.operacionID)}
+                      // onClick={() => onEliminar(operacion.operacionID)}
+                      onClick={() => confirmarEliminacion(operacion.operacionID)}
                       className="btn btn-active btn-secondary"
                     >
                       Eliminar
@@ -117,6 +139,12 @@ function ListaOperaciones({ operaciones, loading, onEditar, onEliminar }) {
             ))}
           </tbody>
         </table>
+        <ModalConfirmar
+          abrirModal={abrirModal}
+          onClickAceptar={aceptarEliminar}
+          onClickCancelar={cancelarEliminar}
+        />
+
       </div>
 
 

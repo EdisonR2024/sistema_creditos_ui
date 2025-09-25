@@ -20,7 +20,7 @@ export async function crearOperacion(operacion) {
     });
 
     if (respuesta.ok) {
-        console.log("Se ha creado una nueva operación");
+        // console.log("Se ha creado una nueva operación");
         let nuevaOperacion = await respuesta.json();
         return nuevaOperacion;
     }
@@ -33,7 +33,7 @@ export async function eliminarOperacion(idOperacion) {
     })
 
     if (respuesta.ok) {
-        console.log("Se ha eliminado la operación");
+        // console.log("Se ha eliminado la operación");
     }
 }
 
@@ -49,7 +49,7 @@ export async function actualizarOperacion(idOperacion, datosOperacion) {
     })
 
     if (respuesta.ok) {
-        console.log("Operación actualizada")
+        // console.log("Operación actualizada")
     }
 
 }
