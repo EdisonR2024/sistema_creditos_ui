@@ -45,13 +45,9 @@ function PrincipalOperaciones() {
   }
 
   const onClickNuevaOperacion = async (operacionNueva) => {
-    // console.log('Nueva operación:', operacionNueva);
     let nuevaOperacion = await crearOperacion(operacionNueva);
     mostrarMensajeTemporal("success", "Operación creada exitosamente");
     setOperaciones([...operaciones, nuevaOperacion]);
-    // setPresentarMensaje(true);
-    
-
   };
 
   const onClickEditarOperacion = (operacion) => {

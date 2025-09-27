@@ -38,7 +38,6 @@ function FormularioOperaciones({ esAccionCrear, setEsAccionCrear, onSubmit,
 
   const onClickSubmit = (e) => {
     e.preventDefault();
-    // console.log('Datos del formulario:', DatosFormulario);
     esAccionCrear ? onSubmit(DatosFormulario) : onActualizar(operacionSeleccionadaActualizar.operacionID, DatosFormulario);
     // onSubmit(DatosFormulario);
     limpiarFormulario();

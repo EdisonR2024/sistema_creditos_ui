@@ -6,6 +6,7 @@ export async function obtenerOperaciones() {
     // console.log("Ingreso a obtenerOperaciones en services");
     let respuesta = await fetch(urlAPI);
     let operaciones = await respuesta.json();
+    // console.log("Operaciones obtenidas:", operaciones);
     return operaciones;
 }
 

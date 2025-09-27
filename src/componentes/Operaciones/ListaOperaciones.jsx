@@ -36,7 +36,8 @@ function ListaOperaciones({ operaciones, loading, onEditar, onEliminar }) {
 
   const calcularFechaFin = (fechaInicio, plazoMeses) => {
     const fecha = new Date(fechaInicio);
-    fecha.setMonth(fecha.getMonth() + plazoMeses);
+    fecha.setMonth(fecha.getMonth() + Number(plazoMeses));
+    // fecha.setMonth(fecha.getMonth() + plazoMeses);
     return fecha.toLocaleDateString('es-EC');
   };
 
