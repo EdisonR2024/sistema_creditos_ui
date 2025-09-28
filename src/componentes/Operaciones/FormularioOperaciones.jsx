@@ -30,11 +30,52 @@ function FormularioOperaciones({ esAccionCrear, setEsAccionCrear, onSubmit,
 
   const onChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setDatosFormulario(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+
+    if (validacionesFormulario(name, value)) {
+
+      setDatosFormulario(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+
+    }
   };
+
+  const validacionesFormulario = (nombreInput, valorIngresado) => {
+    // Aquí puedes agregar validaciones adicionales si es necesario
+
+    /*     if (nombreInput === "identificacion") {
+          const regex = /^[0-9]*$/; // Solo números
+          if (!regex.test(valorIngresado)) {
+            return false;
+          }
+        } */
+
+    switch (nombreInput) {
+      case "identificacion": {
+        const regex = /^[0-9]*$/; // Solo números
+        if (!regex.test(valorIngresado)) {
+          return false;
+        }
+        break;
+      }
+      case "nombre": {
+        const regex = /^[A-Za-z\s]*$/; // Solo letras y espacios
+        if (!regex.test(valorIngresado)) {
+          return false;
+        }
+        break;
+      }
+      case "plazoMeses": {
+        const regex = /^[0-9]*$/; // Solo números
+        if (!regex.test(valorIngresado)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 
   const onClickSubmit = (e) => {
     e.preventDefault();
@@ -78,6 +119,9 @@ function FormularioOperaciones({ esAccionCrear, setEsAccionCrear, onSubmit,
               onChange={onChange}
               className={estilos.inputFormulario}
               placeholder="Ingrese identificación"
+              maxlength="10"
+              pattern="^.{10}$"
+              title="El campo debe tener exactamente 10 caracteres."
               required
             />
           </div>
